@@ -18,5 +18,4 @@ Route::get('/', function () {
 });
 
 Route::get('profiles','EpicJsonController@list');
-
 Route::post('submit-data','EpicJsonController@submitData');

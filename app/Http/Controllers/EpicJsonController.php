@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\epicJson;
+use App\EpicJson;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 class EpicJsonController extends Controller
 {
-
-
     function list()
     {     
       return view('list');
@@ -22,7 +20,7 @@ class EpicJsonController extends Controller
       $data = Http::withHeaders([
       'Content-Type'=>'application/json',
       'Accept'=>'application/json+fhir',
-      'Authorization'=>'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ1cm46b2lkOmZoaXIiLCJjbGllbnRfaWQiOiJkOWYwN2JlNi0yOGNkLTQ2OWEtYjJjMS1jNjU5NWNjODE5MDEiLCJlcGljLmVjaSI6InVybjplcGljOk9wZW4uRXBpYy1jdXJyZW50IiwiZXBpYy5tZXRhZGF0YSI6IjU2SElCcThVTWJvUkNBNmk0eEVLU1htSmdnMTdJLU1UZklJNnNzT3FzMmhEeFROSlVWNUxoUjJlYk9kbzBwS0Z1WURqemJFbHZ1dTdxVVpKVVFydjlFQ1BSa3BQLUdlVVNYaTVhOHo4LXF0clZZeUNxSUhCZTk4ZWo4R0pSclBEIiwiZXBpYy50b2tlbnR5cGUiOiJhY2Nlc3MiLCJleHAiOjE2NTAwMTcxOTksImlhdCI6MTY1MDAxMzU5OSwiaXNzIjoidXJuOm9pZDpmaGlyIiwianRpIjoiYzQ3NmQ2MzQtNDkxZS00MGYwLWI4ODktM2Y3NzYyZGQzYzE5IiwibmJmIjoxNjUwMDEzNTk5LCJzdWIiOiJldk5wLUtoWXdPT3FBWm4xcFoyZW51QTMifQ.EYwILf0bGg0hXUNctPextf9PpP0mGrH1OO_-N5GyXyUT-5w4ZsEC-4s-cEFHT7E1hNT8A8hBM51d422fgfpTLpWt2EQTZMbvX_oDmfUp9UW2mLuSDE2PcIPW8yZ_42AP-lepO5T30c5HWFzp3GQaph2neOnIk44Qzkszgf4j0BqKIHaSH2Rnbxx6tUmOxeCa7ZPBHAGwUg0joyqfndOerp7iEZPsvn-bjzACiGdS2n2GKrMsA7j-clQONDg7ySbiJZsyGAB5_jLriW0lbe0LHxr8C6cGURKq1rzm8vI5oQSRwBSDJ66oItAcSTpD-wPmGuFUrB_jEz53qUjuHNbRxg',]
+      'Authorization'=>'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ1cm46b2lkOmZoaXIiLCJjbGllbnRfaWQiOiJkOWYwN2JlNi0yOGNkLTQ2OWEtYjJjMS1jNjU5NWNjODE5MDEiLCJlcGljLmVjaSI6InVybjplcGljOk9wZW4uRXBpYy1jdXJyZW50IiwiZXBpYy5tZXRhZGF0YSI6Ikk4dFVMWWZEM2lZYjV0QU1VOURjcVRIbS0yUWdndEltbTdBNzlpS2tKZTZkQzBRMnd2MXhkMHpweDItZFZHZHdOLWE0VnNaWjk0TXZaTFBIY2FnN0ZLNVduVWF6aFZfS3JPbVJDZXNNUHJsNE1leERoUGhQNUo1dTBQYkJNdDRTIiwiZXBpYy50b2tlbnR5cGUiOiJhY2Nlc3MiLCJleHAiOjE2NTAwMjIwOTIsImlhdCI6MTY1MDAxODQ5MiwiaXNzIjoidXJuOm9pZDpmaGlyIiwianRpIjoiYWYzMTcwMjktN2IxMC00MjQ1LWJjNTUtNzAzMjJjOTI5ZGQ5IiwibmJmIjoxNjUwMDE4NDkyLCJzdWIiOiJldk5wLUtoWXdPT3FBWm4xcFoyZW51QTMifQ.UJ4kHD-VhfBpf76ShWm5h20Q9OI62IXSdtw9aq60MeauBA8gyYfYSbPu2dups448Sn9HOZyIhmyQd8Fc9AVXYtbDs5MEcC7Utxje-BMhAMrATVV3QaR9O92dkqEczKjWllBtXnuqF0gO5gDc1Ek0K-QQY9jkc2UdvaOKsbdW4kGetg1GpRS0lcdylgWliBR6ZYvH3EpydfJD25647eA6kXbPok0XPoOTuLjFLAyF88lejn0z8mmrCmafAWfaZlR0niHaaMihXB15tKllDb6pOgoIw8rx77bi2oOX-del5rgEL6meEo9WmeDJOHEy5E8FmmvOioIcfe46yY6XZunpgg',]
       )->get("https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/Practitioner?given=$given&name=$name")->json();
       try{
         $epicArray = array();
@@ -64,8 +62,8 @@ class EpicJsonController extends Controller
           }                   
         }
         for ($l = 0; $l < count($epicArray); $l++) {
-          $epicJson = new epicJson;
-          $epicJsonId = epicJson::where('reference_id', '=', $epicArray[$l]['ref_id'])->first();
+          $epicJson = new EpicJson;
+          $epicJsonId = EpicJson::where('reference_id', '=', $epicArray[$l]['ref_id'])->first();
           if ($epicJsonId === null) {
             $epicJson->fullUrl = $epicArray[$l]['fullUrl'];
             $epicJson->resourcetype = $epicArray[$l]['resourceType'];
