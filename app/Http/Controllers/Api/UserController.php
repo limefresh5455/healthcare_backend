@@ -93,4 +93,23 @@ class UserController extends Controller
         }
     }
 
-}
+    Public function updateData(Request $req, $id){
+        try {
+        $Userdetail=User::find($id);
+        $Userdetail->email=$req->input('email');
+        $Userdetail->password = Hash::make($req->input('password'));
+        $Userdetail->company=$req->input('company');
+        $Userdetail->intelli_badge_ID=$req->input('intelli_badge_ID');
+        $Userdetail->not_a_subs_one=$req->input('not_a_subs_one');
+        $Userdetail->symplr_badge_ID=$req->input('symplr_badge_ID');
+        $Userdetail->not_a_subs_two=$req->input('not_a_subs_two');
+        $result = $Userdetail->save();
+        return response()->json(['success' => true, 'message' => 'Updated Successfully'], 200);
+    } catch(Exception $e){
+        return response()->json([
+            "error" => "could_not_register",
+            "message" => "Unable to Update register user"
+        ], 400);
+    }}
+    }
+
