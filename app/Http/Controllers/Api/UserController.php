@@ -30,6 +30,7 @@ class UserController extends Controller
         ]);
         if($validator->fails()){
             return response()->json([
+                'success' => false, 
                 "error" => 'validation_error',
                 "message" => $validator->errors(),
             ], 422);
@@ -61,10 +62,10 @@ class UserController extends Controller
                 'password' => 'required',
             ]);
             if ($validator->fails()) {
-                return response()->json(['success' => false, 'error' => ['message' => $validator->errors()]], 401);
+                return response()->json(['success' => false, 'message' => $validator->errors()], 401);
             }
             if (!$token = auth('api')->attempt($validator->validated())) {
-                return response()->json(['success' => false, 'error' => ['message' => 'Invalid user credientials']], 401);
+                return response()->json(['success' => false, 'message' => ['message' => ['Invalid user credientials']]], 401);
             }
             $userDetail = auth('api')->user();
             return response()->json([
@@ -72,9 +73,10 @@ class UserController extends Controller
                 'access_token' => $token,
                 'token_type' => 'Bearer',
                 'user_id' => $userDetail->id,
+                'message' => 'Logged In Successfully.'
             ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => ['message' => \Config::get('constants.SOMETHING_WENT_WRONG')]], 422);
+            return response()->json(['success' => false, 'error' => ['message' => 'Something Went Wrong.']], 422);
         }
     }
 
