@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\DoctorDetail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class DoctorDetailController extends Controller
 {
@@ -84,4 +85,15 @@ class DoctorDetailController extends Controller
       return DoctorDetail::where("doctor_name","like","%".$name."%")->get();
     }
 
+
+    function getData($id)
+    {
+    return DoctorDetail::find($id)
+    ->join('epic_jsons','epic_jsons.reference_id','=','doctordetails.reference_id')
+    ->join('surgery_details','doctordetails.mr_id','=','surgery_details.mr_id')
+    ->where('surgery_details.mr_id', '=', $id)
+    ->get();
+    }
+
+   // surgery_details
 }

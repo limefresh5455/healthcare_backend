@@ -93,7 +93,7 @@ class UserController extends Controller
         }
     }
 
-    Public function updateData(Request $req, $id){
+     function updateData(Request $req, $id){
         try {
         $Userdetail=User::find($id);
         $Userdetail->email=$req->input('email');

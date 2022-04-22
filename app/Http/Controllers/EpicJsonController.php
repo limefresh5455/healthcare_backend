@@ -6,6 +6,7 @@ use App\EpicJson;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 class EpicJsonController extends Controller
 {
     function list()
@@ -84,4 +85,6 @@ class EpicJsonController extends Controller
           ], 400);
       }
     }
+
+    
 }
