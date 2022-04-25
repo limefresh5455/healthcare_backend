@@ -67,6 +67,8 @@ class UserController extends Controller
                 return response()->json(['success' => false, 'error' => ['message' => 'Invalid user credientials']], 401);
             }
             $userDetail = auth('api')->user();
+            User::where('id', $userDetail->id)  // find your user by their email
+             ->update(['access_token' => $token]);
             return response()->json([
                 'success' => true,
                 'access_token' => $token,
@@ -74,12 +76,13 @@ class UserController extends Controller
                 'user_id' => $userDetail->id,
             ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => ['message' => \Config::get('constants.SOMETHING_WENT_WRONG')]], 422);
+            return response()->json(['success' => false, 'error' => ['message' => $e->getMessage()]], 422);
         }
     }
 
     public function logout(Request $request) {
         try {
+
             $user = JWTAuth::parseToken()->authenticate();
             if (!empty($user)) {
                 $accessToken = $request->header('authorization');
@@ -87,6 +90,8 @@ class UserController extends Controller
                 JWTAuth::invalidate($token);
             }
             auth('api')->logout();
+            User::where('id', $user->id)  // find your user by their email
+            ->update(['access_token' => null]);
             return response()->json(['success' => true, 'message' => 'Logout Successfully'], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => ['message' => 'Something Went Wrong']], 422);
@@ -111,5 +116,62 @@ class UserController extends Controller
             "message" => "Unable to Update register user"
         ], 400);
     }}
+
+     
+    public function change_password(Request $req)
+    {   
+        // $Userdetail->current_password=$req->input('current_password');
+        // $Userdetail->password = Hash::make($req->input('password'));
+        // $Userdetail->confirm_password=$req->input('confirm_password');
+        $validator = Validator::make($req->all(),[
+            'old_password'=>'required',
+            'password'=>'required|min:6|max:100',
+            'confirm_password'=>'required|same:password'
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'message'=>'Validations fails',
+                'error'=>$validator->errors(0)
+            ],200);
+        }
+        
+
+       // $user=$req->user();
+        $user = JWTAuth::parseToken()->authenticate();
+        $users = User::where('id', $user->id)->first();
+        
+        if(Hash::check($req->old_password,$users->password)){
+            
+            $users->update([
+                'password'=>Hash::make($req->password)
+            ]);
+            return response()->json([
+                'message'=>'Password Successfully Updated', 
+             ],400);
+        }else{
+            return response()->json([
+               'message'=>'Old password does not matched', 
+            ],400);
+        }
+
+        // $req->validate([
+
+        //     'current_password' => ['required', new User],
+
+        //     'new_password' => ['required'],
+
+        //     'new_confirm_password' => ['same:new_password'],
+
+        // ]);
+
+        // User::find(auth()->user()->id)->update(['password'=> Hash::make($req->new_password)]);
+        // dd('Password change successfully.');
+    }
+
+
+
+
+
+
     }
 
