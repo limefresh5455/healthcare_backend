@@ -116,6 +116,9 @@ class UserController extends Controller
         $users->not_a_subs_one=$req->input('not_a_subs_one');
         $users->symplr_badge_ID=$req->input('symplr_badge_ID');
         $users->not_a_subs_two=$req->input('not_a_subs_two');
+        $users->first_name=$req->input('first_name');
+        $users->last_name=$req->input('last_name');
+        $users->phone_no=$req->input('phone_no');
         if($req->hasFile('images')){
             $image = $req->file('images');
             $image_name = $image->getClientOriginalName();
