@@ -100,32 +100,44 @@ class UserController extends Controller
         }
     }
 
+     function image(Request $req)
+     { 
+        return $req->file('file')->store('apiDocs'); 
+     }
+
      function updateData(Request $req, $id){
         try {
-        $Userdetail=User::find($id);
-        $Userdetail->email=$req->input('email');
-        $Userdetail->password = Hash::make($req->input('password'));
-        $Userdetail->company=$req->input('company');
-        $Userdetail->intelli_badge_ID=$req->input('intelli_badge_ID');
-        $Userdetail->not_a_subs_one=$req->input('not_a_subs_one');
-        $Userdetail->symplr_badge_ID=$req->input('symplr_badge_ID');
-        $Userdetail->not_a_subs_two=$req->input('not_a_subs_two');
-        $result = $Userdetail->save();
+        $user = JWTAuth::parseToken()->authenticate();    
+        $users = User::where('id', $user->id)->first();
+        $users->email=$req->input('email');
+        $users->password = Hash::make($req->input('password'));
+        $users->company=$req->input('company');
+        $users->intelli_badge_ID=$req->input('intelli_badge_ID');
+        $users->not_a_subs_one=$req->input('not_a_subs_one');
+        $users->symplr_badge_ID=$req->input('symplr_badge_ID');
+        $users->not_a_subs_two=$req->input('not_a_subs_two');
+        if($req->hasFile('images')){
+            $image = $req->file('images');
+            $image_name = $image->getClientOriginalName();
+            $image->move(public_path('/images'),$image_name);
+            $image_path = "/images/" . $image_name;
+            
+            $users->images=$image_path;
+        }
+        $result = $users->save();
         return response()->json(['success' => true, 'message' => 'Updated Successfully'], 200);
     } catch(Exception $e){
         return response()->json([
             "error" => "could_not_register",
             "message" => "Unable to Update register user"
         ], 400);
-    }}
+    }
+}
 
      
     public function change_password(Request $req)
     {   
-        // $Userdetail->current_password=$req->input('current_password');
-        // $Userdetail->password = Hash::make($req->input('password'));
-        // $Userdetail->confirm_password=$req->input('confirm_password');
-        $validator = Validator::make($req->all(),[
+      $validator = Validator::make($req->all(),[
             'old_password'=>'required',
             'password'=>'required|min:6|max:100',
             'confirm_password'=>'required|same:password'
@@ -137,7 +149,6 @@ class UserController extends Controller
             ],200);
         }
         
-
        // $user=$req->user();
         $user = JWTAuth::parseToken()->authenticate();
         $users = User::where('id', $user->id)->first();
@@ -156,23 +167,8 @@ class UserController extends Controller
             ],400);
         }
 
-        // $req->validate([
-
-        //     'current_password' => ['required', new User],
-
-        //     'new_password' => ['required'],
-
-        //     'new_confirm_password' => ['same:new_password'],
-
-        // ]);
-
-        // User::find(auth()->user()->id)->update(['password'=> Hash::make($req->new_password)]);
-        // dd('Password change successfully.');
+     
     }
-
-
-
-
 
 
     }

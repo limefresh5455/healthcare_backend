@@ -12,7 +12,12 @@ class DoctorDetailController extends Controller
 {
     function doctorAdd(Request $req) {
       $validator =  Validator::make($req->all(),[
-        'mr_id' => 'required',
+        'doctor_name' => 'required',
+        'address'=> 'required',
+        'specialist' => 'required',
+        'phone' => 'required|digits:10',
+        'Facility1' => 'required',
+        'Facility2' => 'required',
       ]);
       if($validator->fails()){
          return response()->json([
@@ -22,8 +27,16 @@ class DoctorDetailController extends Controller
       }
       try{
          $doctordetail = new DoctorDetail;
-         $doctordetail->mr_id=$req->input('mr_id');
-         $doctordetail->reference_id=$req->input('reference_id');
+         $doctordetail->doctor_name=$req->input('doctor_name');
+         $doctordetail->address=$req->input('address');
+         $doctordetail->specialist=$req->input('specialist');
+         $doctordetail->phone=$req->input('phone');
+         $doctordetail->facility1=$req->input('facility1');
+         $doctordetail->facility2=$req->input('facility2');
+         $doctordetail->hospital_name=$req->input('hospital_name');
+         $doctordetail->surgery_detail=$req->input('surgery_detail');
+         $doctordetail->surgery_time=$req->input('surgery_time');
+         $doctordetail->surgery_date=$req->input('surgery_date');
          $result = $doctordetail->save();
          return response()->json(['success' => true, 'message' => 'Register Successfully'], 200);
       } catch(Exception $e){
@@ -40,8 +53,16 @@ class DoctorDetailController extends Controller
 
     function update(Request $req,$id) {
       $doctordetail=DoctorDetail::find($id);
-      $doctordetail->mr_id=$req->input('mr_id');
-      $doctordetail->reference_id=$req->input('reference_id');
+      $doctordetail->doctor_name=$req->input('doctor_name');
+      $doctordetail->address=$req->input('address');
+      $doctordetail->specialist=$req->input('specialist');
+      $doctordetail->phone=$req->input('phone');
+      $doctordetail->Facility1=$req->input('Facility1');
+      $doctordetail->Facility2=$req->input('Facility2');
+      $doctordetail->hospital_name=$req->input('hospital_name');
+      $doctordetail->surgery_detail=$req->input('surgery_detail');
+      $doctordetail->surgery_time=$req->input('surgery_time');
+      $doctordetail->Surgery_date=$req->input('Surgery_date');
       $result = $doctordetail->save();
       if($result){
         return ["result"=>"Update Recorded"];
