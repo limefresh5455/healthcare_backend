@@ -21,7 +21,7 @@ class EpicJsonController extends Controller
       $data = Http::withHeaders([
       'Content-Type'=>'application/json',
       'Accept'=>'application/json+fhir',
-      'Authorization'=>'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ1cm46b2lkOmZoaXIiLCJjbGllbnRfaWQiOiJkOWYwN2JlNi0yOGNkLTQ2OWEtYjJjMS1jNjU5NWNjODE5MDEiLCJlcGljLmVjaSI6InVybjplcGljOk9wZW4uRXBpYy1jdXJyZW50IiwiZXBpYy5tZXRhZGF0YSI6IkFLX28wc09JN2tmc3p3cXA0aDdjbVN6d1I3aThUbU9mcjRQemQwNmFsYm5XbzJFdnptQk5pN2VoUVdsenZDeXZDaU5LTUlmTWVfOU9UZ1J3bF9fcFQ1UVk1eFE2U2RsYkRQVnRjOFdqbEI4bTdYZ3cycEJyWDZUMEFSaWtXMDJfIiwiZXBpYy50b2tlbnR5cGUiOiJhY2Nlc3MiLCJleHAiOjE2NTAwMjE5NTIsImlhdCI6MTY1MDAxODM1MiwiaXNzIjoidXJuOm9pZDpmaGlyIiwianRpIjoiZmIyOWY3OGMtYjg0NS00ZjlkLWE3NjctMjM1NjE1MTc2YjlhIiwibmJmIjoxNjUwMDE4MzUyLCJzdWIiOiJldk5wLUtoWXdPT3FBWm4xcFoyZW51QTMifQ.Vm_OD966ivu31fgsPQtnpLglmithUdDoPNJfeU06uBFfOhWsPU3ar5j_gvEMRckV3O0_xJkaI-GrDrzcsLA3mO_iepEkkVGKZnLVlY0O4OoyDyVOAqS5xVL2F-Zs2HWf5RZdJSS1PkPoF4PTdyiSK6EW6wpRQi08VP02zkmTBLOVhN9ZEB5bQGSGqUQQFJxBiUscrOVEj6_KctWkp6zu7wiuKXChRzCfWjmNPzStumka2jgHNi6OvWeOdEHn53d4l-aLG6GfW1K9ebGMQYCm7Yvd-kMH7u9usHRRRHY9rkUMJ4FNM0biqWDT2YP2QqxyabSNINUDsdm2CsiWUHx0IQ',]
+      'Authorization'=>'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ1cm46b2lkOmZoaXIiLCJjbGllbnRfaWQiOiJkOWYwN2JlNi0yOGNkLTQ2OWEtYjJjMS1jNjU5NWNjODE5MDEiLCJlcGljLmVjaSI6InVybjplcGljOk9wZW4uRXBpYy1jdXJyZW50IiwiZXBpYy5tZXRhZGF0YSI6ImhHMUFuaFloSmUzV0RCY2RQOGdBbm16Y3BzcVhqOHV3STZYdWtkUXZoZnV4UTVPYm84ZWRoSWJ4c2NoTU5Zb29IOExyT2lwT1JFUG0xX1Vqek1wVTdKVFktdFN5Zk8tYWJtUmFZUDBvV1NLb0V5dGQ0RzBBYWJfRmF3eFdQVDlSIiwiZXBpYy50b2tlbnR5cGUiOiJhY2Nlc3MiLCJleHAiOjE2NTA5ODQwNzQsImlhdCI6MTY1MDk4MDQ3NCwiaXNzIjoidXJuOm9pZDpmaGlyIiwianRpIjoiM2UzN2YwODktYWYzYy00M2VlLWIzNDYtODc0YmY4Zjg0ZmNmIiwibmJmIjoxNjUwOTgwNDc0LCJzdWIiOiJldk5wLUtoWXdPT3FBWm4xcFoyZW51QTMifQ.FxJ03TodeiSf2tNddFciJoEMZRZ7yyKXq48q5tav-fHs08x4isTDfrd4RQqKrjAk0tEAQ2UDaMN0O8ZRm5SPiLurWHdfAKtEG5z0Rqk2R_LtUWi0aXm3IToEaLy-uChoG6nFRNpylrGdVRfAt-pGEY9ffHPCaMKbAmK7cjgGEtC5iet5EzB0kF11i4C-4gD_Gi9aCU1oqUawPWXQCjD_SPVOwhT5YJOkwqkJQXqx8UZyv0GhwpRS9miEM7-wiqh8bl_OxxEK4R8-xJvaOK4ULKw-J11h1738lUHorIFDoilmwBkbWdq10Yy2UDX76y69uKzYfZf0X6lQE4ihAIW4kw',]
       )->get("https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/Practitioner?given=$given&name=$name")->json();
       try{
         $epicArray = array();
@@ -71,9 +71,9 @@ class EpicJsonController extends Controller
             $epicJson->reference_id = $epicArray[$l]['ref_id'];
             $epicJson->active = $epicArray[$l]['status'];
             $epicJson->gender = $epicArray[$l]['gender'];
-            $epicJson->FullName = $epicArray[$l]['fullName'];
-            $epicJson->LastName = $epicArray[$l]['lastName'];
-            $epicJson->FirstName = $epicArray[$l]['firstName'];
+            $epicJson->full_name = $epicArray[$l]['fullName'];
+            $epicJson->last_name = $epicArray[$l]['lastName'];
+            $epicJson->first_name = $epicArray[$l]['firstName'];
             $epicJson->communication = $epicArray[$l]['communication'];
             $result = $epicJson->save();
           }

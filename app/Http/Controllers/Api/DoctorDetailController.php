@@ -12,12 +12,7 @@ class DoctorDetailController extends Controller
 {
     function doctorAdd(Request $req) {
       $validator =  Validator::make($req->all(),[
-        'doctor_name' => 'required',
-        'address'=> 'required',
-        'specialist' => 'required',
-        'phone' => 'required|digits:10',
-        'Facility1' => 'required',
-        'Facility2' => 'required',
+        'mr_id' => 'required',
       ]);
       if($validator->fails()){
          return response()->json([
@@ -27,16 +22,8 @@ class DoctorDetailController extends Controller
       }
       try{
          $doctordetail = new DoctorDetail;
-         $doctordetail->doctor_name=$req->input('doctor_name');
-         $doctordetail->address=$req->input('address');
-         $doctordetail->specialist=$req->input('specialist');
-         $doctordetail->phone=$req->input('phone');
-         $doctordetail->Facility1=$req->input('Facility1');
-         $doctordetail->Facility2=$req->input('Facility2');
-         $doctordetail->hospital_name=$req->input('hospital_name');
-         $doctordetail->surgery_detail=$req->input('surgery_detail');
-         $doctordetail->surgery_time=$req->input('surgery_time');
-         $doctordetail->Surgery_date=$req->input('Surgery_date');
+         $doctordetail->mr_id=$req->input('mr_id');
+         $doctordetail->reference_id=$req->input('reference_id');
          $result = $doctordetail->save();
          return response()->json(['success' => true, 'message' => 'Register Successfully'], 200);
       } catch(Exception $e){
@@ -53,16 +40,8 @@ class DoctorDetailController extends Controller
 
     function update(Request $req,$id) {
       $doctordetail=DoctorDetail::find($id);
-      $doctordetail->doctor_name=$req->input('doctor_name');
-      $doctordetail->address=$req->input('address');
-      $doctordetail->specialist=$req->input('specialist');
-      $doctordetail->phone=$req->input('phone');
-      $doctordetail->Facility1=$req->input('Facility1');
-      $doctordetail->Facility2=$req->input('Facility2');
-      $doctordetail->hospital_name=$req->input('hospital_name');
-      $doctordetail->surgery_detail=$req->input('surgery_detail');
-      $doctordetail->surgery_time=$req->input('surgery_time');
-      $doctordetail->Surgery_date=$req->input('Surgery_date');
+      $doctordetail->mr_id=$req->input('mr_id');
+      $doctordetail->reference_id=$req->input('reference_id');
       $result = $doctordetail->save();
       if($result){
         return ["result"=>"Update Recorded"];
@@ -88,11 +67,11 @@ class DoctorDetailController extends Controller
 
     function getData($id)
     {
-    return DoctorDetail::find($id)
-    ->join('epic_jsons','epic_jsons.reference_id','=','doctordetails.reference_id')
-    ->join('surgery_details','doctordetails.mr_id','=','surgery_details.mr_id')
-    ->where('surgery_details.mr_id', '=', $id)
-    ->get();
+    return DoctorDetail::join('epic_jsons','epic_jsons.reference_id','=','doctordetails.reference_id')
+     ->join('surgery_details','doctordetails.reference_id','=','surgery_details.reference_id')
+     ->where('surgery_details.mr_id', '=', $id)
+     ->get();
+     
     }
 
    // surgery_details
