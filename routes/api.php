@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
     Route::post('/register','UserController@register');
     Route::post('/login','UserController@login');
     Route::post('/image','UserController@image');
+    Route::post('/getDataa','UserController@getData');
    // Route::put('/updateData/{id}','UserController@updateData'); 
     Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('/changepassword','UserController@change_password');

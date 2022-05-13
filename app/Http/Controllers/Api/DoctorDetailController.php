@@ -67,11 +67,11 @@ class DoctorDetailController extends Controller
 
     function getData($id)
     {
-    return DoctorDetail::find($id)
-    ->join('epic_jsons','epic_jsons.reference_id','=','doctordetails.reference_id')
-    ->join('surgery_details','doctordetails.mr_id','=','surgery_details.mr_id')
-    ->where('surgery_details.mr_id', '=', $id)
-    ->get();
+    return DoctorDetail::join('epic_jsons','epic_jsons.reference_id','=','doctordetails.reference_id')
+     ->join('surgery_details','doctordetails.reference_id','=','surgery_details.reference_id')
+     ->where('surgery_details.mr_id', '=', $id)
+     ->get();
+     
     }
 
    // surgery_details
