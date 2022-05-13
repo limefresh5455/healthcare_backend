@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Route;
     Route::post('/register','UserController@register');
     Route::post('/login','UserController@login');
     Route::post('/image','UserController@image');
-    Route::post('/getDataa','UserController@getData');
    // Route::put('/updateData/{id}','UserController@updateData'); 
     Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('/changepassword','UserController@change_password');
@@ -20,6 +19,7 @@ use Illuminate\Support\Facades\Route;
     Route::put('/update/{id}','DoctorDetailController@update');
     Route::delete('/delete/{id}','DoctorDetailController@delete');
     Route::get('/search/{name}','DoctorDetailController@search');
+    Route::post('/getData','UserController@getData');
     Route::post('logout', 'UserController@logout');
     });
 });

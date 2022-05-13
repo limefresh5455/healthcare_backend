@@ -110,30 +110,30 @@ class UserController extends Controller
 
      function updateData(Request $req, $id){
         try {
-        $user = JWTAuth::parseToken()->authenticate();    
-        $users = User::where('id', $user->id)->first();
-        $users->name=$req->input('first_name').' '.$req->input('last_name');
-        $users->email=$req->input('email');
-        $users->first_name=$req->input('first_name');
-        $users->last_name=$req->input('last_name');
-        $users->phone_no=$req->input('phone_no');
-        if($req->hasFile('images')){
-            $image = $req->file('images');
-            $image_name = $image->getClientOriginalName();
-            $image->move(public_path('/images'),$image_name);
-            $image_path = "/images/" . $image_name;
-            
-            $users->images=$image_path;
+            $user = JWTAuth::parseToken()->authenticate();    
+            $users = User::where('id', $user->id)->first();
+            $users->name=$req->input('first_name').' '.$req->input('last_name');
+            $users->email=$req->input('email');
+            $users->first_name=$req->input('first_name');
+            $users->last_name=$req->input('last_name');
+            $users->phone_no=$req->input('phone_no');
+            if($req->hasFile('images')){
+                $image = $req->file('images');
+                $image_name = $image->getClientOriginalName();
+                $image->move(public_path('/images'),$image_name);
+                $image_path = "/images/" . $image_name;
+                
+                $users->images=$image_path;
+            }
+            $result = $users->save();
+            return response()->json(['success' => true, 'message' => 'Updated Successfully'], 200);
+        } catch(Exception $e){
+            return response()->json([
+                "error" => "could_not_register",
+                "message" => "Unable to Update register user"
+            ], 400);
         }
-        $result = $users->save();
-        return response()->json(['success' => true, 'message' => 'Updated Successfully'], 200);
-    } catch(Exception $e){
-        return response()->json([
-            "error" => "could_not_register",
-            "message" => "Unable to Update register user"
-        ], 400);
     }
-}
 
      
     public function change_password(Request $req)
@@ -149,21 +149,20 @@ class UserController extends Controller
                 'error'=>$validator->errors(0)
             ],200);
         }
-        
-       // $user=$req->user();
         $user = JWTAuth::parseToken()->authenticate();
         $users = User::where('id', $user->id)->first();
-        
         if(Hash::check($req->old_password,$users->password)){
             
             $users->update([
                 'password'=>Hash::make($req->password)
             ]);
             return response()->json([
+                'success' => true,
                 'message'=>'Password Successfully Updated', 
-             ],400);
+             ],200);
         }else{
             return response()->json([
+               'success' => false,
                'message'=>'Old password does not matched', 
             ],400);
         }     
@@ -173,8 +172,6 @@ class UserController extends Controller
     {
         $user = JWTAuth::parseToken()->authenticate();
         $users = User::where('access_token', $user->access_token)->first();
-        
-        //return view('stud_view',['users'=>$users]);
         return response()->json(['success' => true, 
         "data" => $users], 200);
     }
