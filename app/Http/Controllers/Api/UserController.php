@@ -71,15 +71,20 @@ class UserController extends Controller
                 return response()->json(['success' => false, 'message' => ['message' => ['Invalid user credientials']]], 401);
             }
             $userDetail = auth('api')->user();
-            User::where('id', $userDetail->id)  // find your user by their email
-             ->update(['access_token' => $token]);
-            return response()->json([
-                'success' => true,
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-                'user_id' => $userDetail->id,
-                'message' => 'Logged In Successfully.'
-            ]);
+            if ($userDetail) {
+                User::where('id', $userDetail->id)  // find your user by their email
+                 ->update(['access_token' => $token]);
+                return response()->json([
+                    'success' => true,
+                    'access_token' => $token,
+                    'token_type' => 'Bearer',
+                    'user_id' => $userDetail->id,
+                    'message' => 'Logged In Successfully.'
+                ]);
+            } else {
+                auth('api')->logout();
+                return response()->json(['success' => false, 'message' => ['message' => ['Invalid user credientials']]], 401);
+            }
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => ['message' => $e->getMessage()]], 422);
         }
@@ -107,6 +112,27 @@ class UserController extends Controller
      { 
         return $req->file('file')->store('apiDocs'); 
      }
+
+     function updateImage(Request $req, $id){
+        try {
+            $user = JWTAuth::parseToken()->authenticate();    
+            $users = User::where('id', $user->id)->first();
+            if($req->hasFile('images')){
+                $image = $req->file('images');
+                $image_name = $image->getClientOriginalName();
+                $image->move(public_path('/images'),$image_name);
+                $image_path = "/images/" . $image_name;
+                $users->images=$image_path;
+            }
+            $result = $users->save();
+            return response()->json(['success' => true, 'message' => 'Image Updated Successfully', 'image' => $users->images], 200);
+        } catch(Exception $e){
+            return response()->json([
+                'success' => false, 
+                "message" => "Unable to Update register user"
+            ], 400);
+        }
+    }
 
      function updateData(Request $req, $id){
         try {
@@ -168,7 +194,7 @@ class UserController extends Controller
         }     
     }
     
-    function getData(Request $req)
+    function getData()
     {
         $user = JWTAuth::parseToken()->authenticate();
         $users = User::where('access_token', $user->access_token)->first();

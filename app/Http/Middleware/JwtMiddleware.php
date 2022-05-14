@@ -6,7 +6,7 @@ use Closure;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use App\Models\UserDevice;
+use App\User;
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
 class JwtMiddleware extends BaseMiddleware {
@@ -27,9 +27,9 @@ class JwtMiddleware extends BaseMiddleware {
             $accessToken = $request->header('authorization');
             $user = $this->user();
             $token = str_replace('Bearer ', '', $accessToken);
-
-            if ($accessToken !== 'Bearer ' . @$token) {
-                return response()->json(['success' => false, 'error' => ['message' => 'expire token']], 401);                
+            $userToken = User::where('access_token', $token)->first();
+            if ($accessToken !== 'Bearer ' .  @$userToken->access_token) {
+                return response()->json(['success' => false, 'error' => ['message' => 'expire token']], 401);
             }
         } catch (JWTException $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
