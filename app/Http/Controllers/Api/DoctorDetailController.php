@@ -61,7 +61,7 @@ class DoctorDetailController extends Controller
     }
 
     function search($name){
-      return DoctorDetail::where("doctor_name","like","%".$name."%")->get();
+      return DoctorDetail::where("mr_id","like","%".$name."%")->get();
     }
 
 
