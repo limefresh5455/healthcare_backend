@@ -50,10 +50,11 @@ class DoctorDetailController extends Controller
       }
     }
 
-    function delete($id) {
-      $device=DoctorDetail::find($id);
-      $result=$device->delete();
-      if($result){
+    function delete($reference_id) {
+    //  $data = DoctorDetail::find($reference_id);
+      $data = DoctorDetail::where('reference_id', $reference_id)->delete();
+     // $result=$data->delete();
+      if($data){
         return ["result"=>"Record has been deleted"];
       }else {
         return ["result"=>"Record has not been delete"];

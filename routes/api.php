@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
         Route::post('/doctor-add','DoctorDetailController@doctorAdd');
         Route::get('/show','DoctorDetailController@list');
         Route::put('/update/{id}','DoctorDetailController@update');
-        Route::delete('/delete/{id}','DoctorDetailController@delete');
+        Route::delete('/delete/{reference_id}','DoctorDetailController@delete');
         Route::get('/listepic','EpicJsonController@listepic');
         Route::get('/searchepic/{name}','EpicJsonController@searchepic');
         Route::get('/getData','UserController@getData');
