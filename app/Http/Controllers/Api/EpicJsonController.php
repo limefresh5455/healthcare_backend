@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 class EpicJsonController extends Controller
 {
   
-
     function searchepic($name){
       return EpicJson::select('epic_jsons.*', 'doctordetails.reference_id as doctor_id')
       ->leftJoin('doctordetails', 'doctordetails.reference_id', "=", 'epic_jsons.reference_id')

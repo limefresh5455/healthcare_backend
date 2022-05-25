@@ -25,7 +25,7 @@ class DoctorDetailController extends Controller
          $doctordetail->mr_id=$req->input('mr_id');
          $doctordetail->reference_id=$req->input('reference_id');
          $result = $doctordetail->save();
-         return response()->json(['success' => true, 'message' => 'Register Successfully'], 200);
+         return response()->json(['success' => true, 'message' => 'Add Profile Successfully'], 200);
       } catch(Exception $e){
         return response()->json([
           "error" => "could_not_register",
@@ -55,9 +55,9 @@ class DoctorDetailController extends Controller
       $data = DoctorDetail::where('reference_id', $reference_id)->delete();
      // $result=$data->delete();
       if($data){
-        return ["result"=>"Record has been deleted"];
+        return ["success" => true, "message"=>"Remove Profile"];
       }else {
-        return ["result"=>"Record has not been delete"];
+        return ["success" => false,"message"=>"Profile has not been Remove"];
       }
     }
 
