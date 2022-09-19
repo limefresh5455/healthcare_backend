@@ -50,10 +50,16 @@ class DoctorDetailController extends Controller
       }
     }
 
-    function delete($reference_id) {
+    function delete($reference_id,$mr_id) {
     //  $data = DoctorDetail::find($reference_id);
-      $data = DoctorDetail::where('reference_id', $reference_id)->delete();
+      
+   // $data = DoctorDetail::where('reference_id', $reference_id)->delete();
+
      // $result=$data->delete();
+     $data = DoctorDetail::where('reference_id', $reference_id)
+        ->where('mr_id', $mr_id)
+        ->delete();
+
       if($data){
         return ["success" => true, "message"=>"Remove Profile"];
       }else {

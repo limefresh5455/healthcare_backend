@@ -25,7 +25,7 @@ class JwtMiddleware extends BaseMiddleware {
     public function handle($request, Closure $next) {
         try {
             $accessToken = $request->header('authorization');
-            $user = $this->user();
+            $User = $this->user();
             $token = str_replace('Bearer ', '', $accessToken);
             $userToken = User::where('access_token', $token)->first();
             if ($accessToken !== 'Bearer ' .  @$userToken->access_token) {

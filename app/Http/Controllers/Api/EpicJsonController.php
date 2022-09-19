@@ -7,13 +7,17 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
+use App\Helpers;
 class EpicJsonController extends Controller
 {
   
-    function searchepic($name){
-      return EpicJson::select('epic_jsons.*', 'doctordetails.reference_id as doctor_id')
-      ->leftJoin('doctordetails', 'doctordetails.reference_id', "=", 'epic_jsons.reference_id')
+    function searchepic($name, $userId){
+      $test = EpicJson::select('epic_jsons.*')
       ->where("full_name","like","%".$name."%")->get();
+      foreach($test as $val){
+        $test[0]['doctor'] = Helpers::checkValidUser($val->reference_id, $userId);
+      }
+      return $test;
     }
     
     function listepic() {

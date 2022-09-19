@@ -90,6 +90,40 @@ class UserController extends Controller
         }
     }
 
+    // public function logout(Request $request) {
+    //     try {
+    //         $accessToken = \Request::header('authorization');
+    //         $token = str_replace('Bearer ', '', $accessToken);
+    //         // echo "<pre>";
+    //         // print_r($token);
+    //         // die();
+    //       //  JWTAuth::invalidate($token);
+    //         $user = JWTAuth::invalidate($token);
+    //         echo "<pre>";
+    //         print_r($user);
+    //         die();
+    //         $Id = User::where('user_id',$user->id)->delete();
+    //         echo "<pre>";
+    //         print_r($Id);
+    //         die();
+    //         try {
+    //             JWTAuth::invalidate($token);
+    //         } catch (\Exception $e) {
+    //             $json = ['success' => false, 'error' => ['message' => $e->getMessage()]];
+    //             return $json;
+    //         }
+    //         $json = ['success' => true, 'message' => 'You are Logged out.',];
+    //         return $json;
+    //     } catch (\Exception $e) {
+    //         $json = ['success' => false, 'error' => ['message' => $e->getMessage()]];
+    //         echo "<pre>";
+    //             print_r($json);
+    //             die();
+    //         return $json;
+    //     }
+    // }
+
+     
     public function logout(Request $request) {
         try {
 
@@ -107,6 +141,7 @@ class UserController extends Controller
             return response()->json(['success' => false, 'error' => ['message' => 'Something Went Wrong']], 422);
         }
     }
+
 
      function image(Request $req)
      { 
